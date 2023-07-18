@@ -1,10 +1,13 @@
 package ru.ivanov.bootmvc.dao;
 
-import jakarta.persistence.*;
 import org.springframework.stereotype.Repository;
 import ru.ivanov.bootmvc.model.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -36,5 +39,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void save(User user) {
         entityManager.persist(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String userName) {
+        //getSingleResult() - бросит ошибку если такого user нет
+        return Optional.of((User) entityManager
+                .createQuery("from User u where firstName = :userName")
+                .setParameter("userName",userName)
+                .getSingleResult());
     }
 }
