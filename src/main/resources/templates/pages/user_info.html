@@ -21,6 +21,13 @@
   </style>
 </head>
 <body>
+<!--<a href="/logout">Logout</a>-->
+<!--После добавление в login-form отправки CSRF-token Заменим href="/logout" на форму
+    тк теперь у нас POST запрос-->
+<form th:action="@{/logout}" th:method="POST">
+  <input type="submit" value="Logout">
+</form>
+<hr/>
 <table>
   <thead><b>Info about User Authenticated </b>
   <tr>
@@ -37,7 +44,5 @@
   </tr>
   </tbody>
 </table>
-<br/>
-<hr/>
 </body>
 </html>

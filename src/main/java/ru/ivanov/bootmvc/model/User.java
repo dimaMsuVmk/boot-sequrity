@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany( fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
 
