@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.ivanov.bootmvc.security.handler.CustomAuthenticationSuccessHandler;
+import ru.ivanov.bootmvc.security.handler.LoginSuccessHandler;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,9 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        this.authProvider = authProvider;
 //    }
     private final UserDetailsService userDetailsService;
-    private final CustomAuthenticationSuccessHandler successHandler;
+    private final LoginSuccessHandler successHandler;
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, CustomAuthenticationSuccessHandler successHandler){
+    public SecurityConfig(UserDetailsService userDetailsService, LoginSuccessHandler successHandler){
         this.userDetailsService = userDetailsService;
         this.successHandler = successHandler;
     }
@@ -60,5 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successHandler)
                 //.defaultSuccessUrl("/user",true)
                 .and();
+
     }
 }

@@ -6,10 +6,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.ivanov.bootmvc.model.Role;
 import ru.ivanov.bootmvc.model.User;
 import ru.ivanov.bootmvc.service.RegistrationService;
-import ru.ivanov.bootmvc.util.RoleUtil;
+import ru.ivanov.bootmvc.util.Init;
 import ru.ivanov.bootmvc.util.UserValidator;
 
 import javax.validation.Valid;
@@ -32,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        user.getRoles().add(RoleUtil.USER);
+        user.getRoles().add(Init.USER);
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) return "/registration";
         registrationService.register(user);
