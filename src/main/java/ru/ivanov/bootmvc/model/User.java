@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
-    @ManyToMany( fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
 
@@ -40,6 +41,13 @@ public class User implements UserDetails {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+    public User(String firstName, String lastName, String email,String password,Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -129,5 +137,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    public boolean hasRole(String roleName) {
+        if (null == roles|| 0 == roles.size()) {
+            return false;
+        }
+        Optional<Role> findRole = roles.stream()
+                .filter(role -> roleName.equals(role.getName()))
+                .findFirst();
+        return findRole.isPresent();
     }
 }

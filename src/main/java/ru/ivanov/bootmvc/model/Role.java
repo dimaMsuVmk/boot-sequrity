@@ -48,6 +48,6 @@ public class Role implements GrantedAuthority{
     }
     @Override
     public String toString() {
-        return String.format("Role [id = %d; name = %s;]", id, name);
+        return name;
     }
 }

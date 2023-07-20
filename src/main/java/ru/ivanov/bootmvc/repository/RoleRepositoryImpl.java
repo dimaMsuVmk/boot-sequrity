@@ -33,4 +33,12 @@ public class RoleRepositoryImpl implements RoleRepository {
     public void save(Role role) {
         entityManager.persist(role);
     }
+    @Override
+    @Transactional
+    public Role getRoleByName(String name) {
+        return entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :roleName", Role.class)
+                .setParameter("roleName", name)
+                .setMaxResults(1)
+                .getSingleResult();
+    }
 }

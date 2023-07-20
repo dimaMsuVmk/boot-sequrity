@@ -17,17 +17,22 @@
   <label for="id">Id</label>
   <input readonly type="number" th:field="*{id}" id="id">
   <br/>
-  <label for="firstName">FirstName</label>
+  <label for="firstName">FirstName </label>
   <input type="text" th:field="*{firstName}" id="firstName" placeholder="vvedite firstName">
   <br/>
-  <label for="lastName">LastName</label>
+  <label for="lastName">LastName </label>
   <input type="text" th:field="*{lastName}" id="lastName" placeholder="vvedite lastName">
   <br/>
-  <label for="email">Email</label>
+  <label for="email" th:text="Email "/>
   <input type="text" th:field="*{email}" id="email" placeholder="vvedite email">
   <br/>
   <label for="password">Password</label>
   <input type="password" th:field="*{password}" id="password" placeholder="vvedite password">
+  <br/>
+  <div th:each="role : ${allRoles}">
+    <label th:for="${role}" th:text="${role}"/>
+    <input type="checkbox" name="selectedRoles" th:checked="${user.hasRole('__${role.name}__')}" th:id="${role}" th:value="${role}">
+  </div>
   <br/>
   <input type="submit" value="Update user">
 </form>
