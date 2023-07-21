@@ -17,7 +17,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
-        TypedQuery<User> query = entityManager.createQuery("FROM User", User.class);
+        TypedQuery<User> query = entityManager.createQuery("FROM User u join fetch u.roles", User.class);
         return query.getResultList();
     }
 
@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findByUsername(String userName) {
         //getSingleResult() - бросит ошибку если такого user нет
         return Optional.of((User) entityManager
-                .createQuery("from User u where firstName = :userName")
+                .createQuery("from User u join fetch u.roles where u.firstName = :userName")
                 .setParameter("userName",userName)
                 .getSingleResult());
     }

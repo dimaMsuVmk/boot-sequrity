@@ -53,7 +53,6 @@ public class AdminController {
         model.addAttribute("allRoles", roleRepository.findAll());
         return "edit";
     }
-    @Transactional
     @PatchMapping("/admin/{id}")
     public String updatePerson(@ModelAttribute("user") User updateUser, @RequestParam String[] selectedRoles) {
         String encodedPassword = passwordEncoder.encode(updateUser.getPassword());
@@ -63,6 +62,7 @@ public class AdminController {
             if (role.equals("ROLE_ADMIN")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
             if (role.equals("ROLE_GUEST")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
         }
+        Set<Role> set = updateUser.getRoles();
         userService.updateUser(updateUser);
         return "redirect:/admin";
     }

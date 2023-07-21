@@ -1,5 +1,7 @@
 package ru.ivanov.bootmvc.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,7 +31,8 @@ public class User implements UserDetails {
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
 
