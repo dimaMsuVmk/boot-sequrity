@@ -5,7 +5,7 @@ import ru.ivanov.bootmvc.model.User;
 
 import java.util.List;
 
-public interface UserService extends UserDetailsService {
+public interface UserService {
     List<User> getAllUsers();
 
     User getUserById(long id);

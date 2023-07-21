@@ -9,22 +9,25 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.ivanov.bootmvc.service.UserService;
+import ru.ivanov.bootmvc.service.UsersDetailService;
 
 import java.util.Collections;
 
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
-    private final UserService userDetailsService;
+    private final UserService userService;
+    private final UsersDetailService usersDetailService;
     @Autowired
-    public AuthProviderImpl(UserService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public AuthProviderImpl(UserService userDetailsService, UsersDetailService usersDetailService) {
+        this.userService = userDetailsService;
+        this.usersDetailService = usersDetailService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         String userName = authentication.getName();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetails userDetails = usersDetailService.loadUserByUsername(userName);
 
         String password = authentication.getCredentials().toString();
         if(!password.equals(userDetails.getPassword())) throw new BadCredentialsException("Incorrect password");

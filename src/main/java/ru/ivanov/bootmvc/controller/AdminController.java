@@ -37,6 +37,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("allRoles",roleRepository.findAll());
         return "users";
     }
 
@@ -62,7 +63,6 @@ public class AdminController {
             if (role.equals("ROLE_ADMIN")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
             if (role.equals("ROLE_GUEST")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
         }
-        Set<Role> set = updateUser.getRoles();
         userService.updateUser(updateUser);
         return "redirect:/admin";
     }
@@ -74,9 +74,14 @@ public class AdminController {
     }
 
     @PostMapping("/admin")
-    public String create(@ModelAttribute User user) {
+    public String create(@ModelAttribute User user,@RequestParam String[] selectedRoles) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        for (String role : selectedRoles) {
+            if (role.equals("ROLE_USER")) user.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
+            if (role.equals("ROLE_ADMIN")) user.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
+            if (role.equals("ROLE_GUEST")) user.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
+        }
         userService.save(user);
         return "redirect:/admin";
     }
