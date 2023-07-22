@@ -35,6 +35,11 @@ public class UserDaoImpl implements UserDao {
     public void removeUserById(long id) {
         entityManager.createQuery("delete from User where id = :id").setParameter("id", id).executeUpdate();
     }
+    @Override
+    public String getPassword(Long id) {
+        return entityManager.createQuery("select u.password from User u where id = :id", String.class)
+                .setParameter("id", id).getSingleResult();
+    }
 
     @Override
     public void save(User user) {

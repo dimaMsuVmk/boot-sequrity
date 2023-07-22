@@ -1,6 +1,5 @@
 package ru.ivanov.bootmvc.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.ivanov.bootmvc.model.User;
 
 import java.util.List;
@@ -15,4 +14,5 @@ public interface UserService {
     void removeUserById(long id);
 
     void save(User user);
+    String getEncodedPassword(Long id);
 }
