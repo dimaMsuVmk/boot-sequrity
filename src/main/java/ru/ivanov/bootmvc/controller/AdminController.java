@@ -64,6 +64,11 @@ public class AdminController {
     public String updatePerson(@ModelAttribute("user") @Validated User updateUser, BindingResult bindingResult,
                                @RequestParam String[] selectedRoles, @RequestParam Long id,
                                RedirectAttributes redirectAttributes) {
+        for (String role : selectedRoles) {
+            if (role.equals("ROLE_USER")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
+            if (role.equals("ROLE_ADMIN")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
+            if (role.equals("ROLE_GUEST")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
+        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("errorUser", updateUser);
@@ -73,12 +78,6 @@ public class AdminController {
             String encodedPassword = passwordEncoder.encode(updateUser.getPassword());
             updateUser.setPassword(encodedPassword);
         } else updateUser.setPassword(userService.getEncodedPassword(id));
-
-        for (String role : selectedRoles) {
-            if (role.equals("ROLE_USER")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
-            if (role.equals("ROLE_ADMIN")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
-            if (role.equals("ROLE_GUEST")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
-        }
         userService.updateUser(updateUser);
         return "redirect:/admin";
     }
