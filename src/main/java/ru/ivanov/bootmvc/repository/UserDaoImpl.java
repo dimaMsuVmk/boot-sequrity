@@ -17,7 +17,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
-        TypedQuery<User> query = entityManager.createQuery("FROM User u join fetch u.roles", User.class);
+        TypedQuery<User> query = entityManager
+                .createQuery("FROM User u left join fetch u.roles", User.class);
         return query.getResultList();
     }
 
@@ -35,6 +36,7 @@ public class UserDaoImpl implements UserDao {
     public void removeUserById(long id) {
         entityManager.createQuery("delete from User where id = :id").setParameter("id", id).executeUpdate();
     }
+
     @Override
     public String getPassword(Long id) {
         return entityManager.createQuery("select u.password from User u where id = :id", String.class)
@@ -51,7 +53,7 @@ public class UserDaoImpl implements UserDao {
         //getSingleResult() - бросит ошибку если такого user нет
         return Optional.of((User) entityManager
                 .createQuery("from User u join fetch u.roles where u.firstName = :userName")
-                .setParameter("userName",userName)
+                .setParameter("userName", userName)
                 .getSingleResult());
     }
 }

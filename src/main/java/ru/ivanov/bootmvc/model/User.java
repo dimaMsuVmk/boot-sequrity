@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private String email;
     //@NotEmpty(message = "Password should not be empty")
     private String password;
+    //@NotEmpty
     @Fetch(FetchMode.SUBSELECT)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles")

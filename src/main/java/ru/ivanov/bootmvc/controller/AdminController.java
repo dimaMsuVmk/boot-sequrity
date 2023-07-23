@@ -12,8 +12,6 @@ import ru.ivanov.bootmvc.model.User;
 import ru.ivanov.bootmvc.repository.RoleRepository;
 import ru.ivanov.bootmvc.service.UserService;
 
-import javax.validation.Valid;
-
 @Controller
 public class AdminController {
     private final UserService userService;
@@ -34,6 +32,8 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getUsers(Model model) {
+        if (model.containsAttribute("errorUser"))
+            model.addAttribute("user", model.getAttribute("errorUser"));
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("allRoles", roleRepository.findAll());
         return "users";
@@ -54,7 +54,7 @@ public class AdminController {
         if (!model.containsAttribute("errorUser")) {
             model.addAttribute("user", userService.getUserById(id));
         } else {
-            model.addAttribute("user",model.getAttribute("errorUser"));
+            model.addAttribute("user", model.getAttribute("errorUser"));
         }
         model.addAttribute("allRoles", roleRepository.findAll());
         return "edit";
@@ -89,14 +89,22 @@ public class AdminController {
     }
 
     @PostMapping("/admin")
-    public String create(@ModelAttribute User user, @RequestParam String[] selectedRoles) {
+    public String create(@ModelAttribute @Validated User user, BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes, @RequestParam(required = false) String[] selectedRoles ) {
+        if(selectedRoles != null) {
+            for (String role : selectedRoles) {
+                if (role.equals("ROLE_USER")) user.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
+                if (role.equals("ROLE_ADMIN")) user.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
+                if (role.equals("ROLE_GUEST")) user.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
+            }
+        }
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("errorUser", user);
+            return "redirect:/admin";
+        }
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        for (String role : selectedRoles) {
-            if (role.equals("ROLE_USER")) user.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
-            if (role.equals("ROLE_ADMIN")) user.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
-            if (role.equals("ROLE_GUEST")) user.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
-        }
         userService.save(user);
         return "redirect:/admin";
     }

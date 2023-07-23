@@ -53,9 +53,9 @@
         <input type="submit" value="Delete">
       </form>
     </td>
-    <div th:each="role : ${user.roles}">
-      <td th:text="${role.toString()}">Role Name</td>
-    </div>
+      <div th:each="role : ${user.roles}">
+        <td th:text="${role.toString()}">Role Name</td>
+      </div>
   </tr>
   </tbody>
 </table>
@@ -73,11 +73,16 @@
   <label for="password">Password</label>
   <input type="password" th:field="*{password}" id="password">
   <br/>
+
+  <p>Roles:</p>
   <div th:each="role : ${allRoles}">
     <label th:for="${role}" th:text="${role}"/>
-    <input type="checkbox" name="selectedRoles" th:id="${role}" th:value="${role}">
+    <input type="checkbox" name="selectedRoles" th:checked="${user.hasRole('__${role.name}__')}" th:id="${role}" th:value="${role}">
   </div>
   <input type="submit" value="Add New User"/>
 </form>
+<div th:if="${errors}">
+  <p style="color : red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message<p/>
+</div>
 </body>
 </html>

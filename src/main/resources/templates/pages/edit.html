@@ -25,6 +25,7 @@
   <br/>
   <label for="email" th:text="Email "/>
   <input type="text" th:field="*{email}" id="email" placeholder="vvedite email">
+<!--  <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>-->
   <br/>
   <label for="password">Password</label>
   <input type="password" th:field="*{password}" id="password" placeholder="vvedite password">
