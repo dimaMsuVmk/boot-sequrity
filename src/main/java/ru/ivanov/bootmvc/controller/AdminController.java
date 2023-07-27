@@ -63,16 +63,19 @@ public class AdminController {
     @PatchMapping("/admin/{id}")
     public String updatePerson(@ModelAttribute("user") @Validated User updateUser, BindingResult bindingResult,
                                @RequestParam String[] selectedRoles, @RequestParam Long id,
-                               RedirectAttributes redirectAttributes) {
+                               RedirectAttributes redirectAttributes,Model model) {
         for (String role : selectedRoles) {
             if (role.equals("ROLE_USER")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_USER"));
             if (role.equals("ROLE_ADMIN")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_ADMIN"));
             if (role.equals("ROLE_GUEST")) updateUser.getRoles().add(roleRepository.getRoleByName("ROLE_GUEST"));
         }
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("errorUser", updateUser);
-            return "redirect:/admin/" + id + "/edit";
+//            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+//            redirectAttributes.addFlashAttribute("errorUser", updateUser);
+//            return "redirect:/admin/" + id + "/edit";
+
+            model.addAttribute("allRoles", roleRepository.findAll());
+            return "/edit";
         }
         if (updateUser.getPassword().length() != 0) {
             String encodedPassword = passwordEncoder.encode(updateUser.getPassword());

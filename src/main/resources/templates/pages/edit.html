@@ -25,7 +25,7 @@
   <br/>
   <label for="email" th:text="Email "/>
   <input type="text" th:field="*{email}" id="email" placeholder="vvedite email">
-<!--  <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>-->
+  <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color : red">email error</span>
   <br/>
   <label for="password">Password</label>
   <input type="password" th:field="*{password}" id="password" placeholder="vvedite password">
@@ -37,8 +37,8 @@
   <br/>
   <input type="submit" value="Update user">
 </form>
-<div th:if="${errors}">
-  <p style="color : red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message<p/>
-</div>
+<!--<div th:if="${errors}">-->
+<!--  <p style="color : red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message<p/>-->
+<!--</div>-->
 </body>
 </html>
